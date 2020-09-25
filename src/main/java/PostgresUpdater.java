@@ -27,6 +27,7 @@ public class PostgresUpdater {
         fetchRecords(url, user, password, fetchSize);
     }
 
+    // Fetch and update records in batches of specified fetchSize
     private static void fetchRecords(String url, String user, String password, int fetchSize) {
         try (Connection con = DriverManager.getConnection(url, user, password)) {
             // make sure autocommit is off
@@ -49,7 +50,7 @@ public class PostgresUpdater {
                 datasetRows.add(dr);
 
                 if (datasetRows.size() == fetchSize) {
-                    System.out.println("### updating a batch  of dataset rows : " + datasetRows);
+                    lgr.log(Level.INFO,"### updating a batch  of dataset rows : " + datasetRows);
                     updateRowsInBatches(datasetRows, url, user, password);
 
                     datasetRows.clear();
@@ -57,7 +58,7 @@ public class PostgresUpdater {
             }
 
             if (!datasetRows.isEmpty()) {
-                System.out.println("### updating remaining batch of dataset rows : " + datasetRows);
+                lgr.log(Level.INFO,"### updating remaining batch of dataset rows : " + datasetRows);
                 updateRowsInBatches(datasetRows, url, user, password);
 
                 datasetRows.clear();
@@ -115,7 +116,7 @@ public class PostgresUpdater {
                             editRdfDatasetObject.put(DC_TERMS_PUBLISHER, publisherArray);
                             editRdfObject.put(dataset_iri, editRdfDatasetObject);
 
-                            System.out.println("#### updated edit_rdf for : " + dataset_iri);
+                            lgr.log(Level.INFO,"#### updated edit_rdf for : " + dataset_iri);
                         }
                     }
 
@@ -128,7 +129,7 @@ public class PostgresUpdater {
                             baseRdfDatasetObject.put(DC_TERMS_PUBLISHER, publisherArray);
                             baseRdfDatasetObject.put(dataset_iri, editRdfDatasetObject);
 
-                            System.out.println("#### updated base_rdf for : " + dataset_iri);
+                            lgr.log(Level.INFO,"#### updated base_rdf for : " + dataset_iri);
                         }
                     }
 
@@ -143,7 +144,7 @@ public class PostgresUpdater {
             }
 
             int[] updateCounts = pst.executeBatch();
-            System.out.println("#### batch  update total rows count : " + updateCounts.length);
+            lgr.log(Level.INFO,"#### batch  update total rows count : " + updateCounts.length);
             conn.commit();
             conn.setAutoCommit(true);
         } catch (Exception ex) {
