@@ -1,5 +1,4 @@
     public class DatasetRow {
-
         private String dataset_iri;
         private String domain_id;
         private String base_rdf;
