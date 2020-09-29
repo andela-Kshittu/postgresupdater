@@ -127,7 +127,7 @@ public class PostgresUpdater {
 
                         if (baseRdfDatasetObject.has(DC_TERMS_IDENTIFIER)) {
                             baseRdfDatasetObject.put(DC_TERMS_PUBLISHER, publisherArray);
-                            baseRdfDatasetObject.put(dataset_iri, editRdfDatasetObject);
+                            baseRdfObject.put(dataset_iri, baseRdfDatasetObject);
 
                             lgr.log(Level.INFO,"#### updated base_rdf for : " + dataset_iri);
                         }
